@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "mysite2025-25a7b"
+  },
+  "targets": {
+    "mysite2025-25a7b": {
+      "hosting": {
+        "auth-gate": [
+          "auth-gate-site"
+        ]
+      }
+    }
+  }
+}
