@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
-   Auth Gate — Glassmorphism Theme
-   Прозрачные "стеклянные" поверхности, анимированный фон,
-   плавные анимации появления и hover-эффекты.
+   Auth Gate — Glassmorphism Pro
+   Прозрачные поверхности, градиентная рамка, «прожектор» за
+   курсором, вращающееся свечение, каскадные анимации.
    ============================================================ */
 
 :root {
@@ -14,14 +14,12 @@
   --ag-cyan: #22d3ee;
   --ag-fuchsia: #d946ef;
   --ag-text: #f1f5f9;
-  --ag-text-muted: rgba(241, 245, 249, 0.65);
+  --ag-text-muted: rgba(241, 245, 249, 0.66);
   --ag-text-faint: rgba(241, 245, 249, 0.4);
-  --ag-glass: rgba(255, 255, 255, 0.08);
-  --ag-glass-strong: rgba(255, 255, 255, 0.12);
+  --ag-glass: rgba(255, 255, 255, 0.07);
   --ag-border: rgba(255, 255, 255, 0.16);
-  --ag-border-focus: rgba(139, 92, 246, 0.8);
   --ag-error: #f87171;
-  --ag-radius: 20px;
+  --ag-radius: 22px;
 }
 
 *,
@@ -47,11 +45,13 @@ body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.45);
   color: #fff;
 }
 
-/* ===== Анимированный фон ===== */
+/* ============================================================
+   ФОН
+   ============================================================ */
 .ag-auth-layout {
   position: relative;
   min-height: 100vh;
@@ -59,40 +59,62 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(135deg, #0f1023 0%, #1a1040 45%, #0f1b33 100%);
+  background: linear-gradient(135deg, #0f1023 0%, #1a1040 45%, #0e1b33 100%);
   background-size: 200% 200%;
-  animation: agBgShift 18s ease-in-out infinite;
+  animation: agBgShift 16s ease-in-out infinite;
   overflow: hidden;
+  perspective: 1200px;
 }
 
-/* Плавающие "шары" света позади карточки */
-.ag-auth-layout::before,
-.ag-auth-layout::after {
-  content: '';
+/* Тонкая сетка поверх фона */
+.ag-bg-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 75%);
+}
+
+/* Три светящихся шара */
+.ag-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(100px);
   opacity: 0.55;
   pointer-events: none;
   z-index: 0;
 }
 
-.ag-auth-layout::before {
-  width: 480px;
-  height: 480px;
-  top: -120px;
-  left: -120px;
-  background: radial-gradient(circle, var(--ag-violet), transparent 70%);
-  animation: agOrbA 22s ease-in-out infinite alternate;
-}
-
-.ag-auth-layout::after {
+.ag-orb--1 {
   width: 520px;
   height: 520px;
-  bottom: -160px;
-  right: -140px;
+  top: -140px;
+  left: -140px;
+  background: radial-gradient(circle, var(--ag-violet), transparent 70%);
+  animation: agOrbA 20s ease-in-out infinite alternate;
+}
+
+.ag-orb--2 {
+  width: 560px;
+  height: 560px;
+  bottom: -180px;
+  right: -160px;
   background: radial-gradient(circle, var(--ag-cyan), transparent 70%);
-  animation: agOrbB 26s ease-in-out infinite alternate;
+  animation: agOrbB 24s ease-in-out infinite alternate;
+}
+
+.ag-orb--3 {
+  width: 320px;
+  height: 320px;
+  top: 40%;
+  left: 55%;
+  background: radial-gradient(circle, var(--ag-fuchsia), transparent 70%);
+  opacity: 0.35;
+  animation: agOrbC 18s ease-in-out infinite alternate;
 }
 
 @keyframes agBgShift {
@@ -102,56 +124,112 @@ body {
 
 @keyframes agOrbA {
   0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(60px, 40px) scale(1.15); }
-  100% { transform: translate(-30px, 80px) scale(0.95); }
+  50%  { transform: translate(70px, 50px) scale(1.18); }
+  100% { transform: translate(-40px, 90px) scale(0.92); }
 }
 
 @keyframes agOrbB {
   0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(-70px, -50px) scale(1.2); }
-  100% { transform: translate(40px, -20px) scale(0.9); }
+  50%  { transform: translate(-80px, -60px) scale(1.22); }
+  100% { transform: translate(50px, -30px) scale(0.88); }
 }
 
-/* ===== Стеклянная карточка ===== */
+@keyframes agOrbC {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-90px, -50px) scale(1.3); }
+}
+
+/* ============================================================
+   КАРТОЧКА — стекло + градиентная рамка + прожектор
+   ============================================================ */
 .ag-auth-layout__card {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 420px;
-  background: var(--ag-glass);
-  backdrop-filter: blur(22px) saturate(160%);
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-  border: 1px solid var(--ag-border);
+  max-width: 430px;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
   border-radius: var(--ag-radius);
-  padding: 40px;
+  padding: 42px;
   box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  animation: agCardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    0 30px 90px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  animation: agCardIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.3s ease;
+}
+
+.ag-auth-layout__card:hover {
+  transform: translateY(-2px);
+}
+
+/* Градиентная рамка */
+.ag-auth-layout__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.7),
+    rgba(34, 211, 238, 0.45) 40%,
+    rgba(217, 70, 239, 0.6) 80%,
+    rgba(139, 92, 246, 0.7)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Прожектор, следующий за курсором */
+.ag-card-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(139, 92, 246, 0.16),
+    rgba(34, 211, 238, 0.06) 45%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.ag-auth-layout__card:hover .ag-card-spotlight {
+  opacity: 1;
 }
 
 @keyframes agCardIn {
   from {
     opacity: 0;
-    transform: translateY(28px) scale(0.97);
+    transform: translateY(34px) scale(0.95) rotateX(6deg);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotateX(0);
   }
 }
 
-/* ===== Бренд ===== */
+/* ============================================================
+   БРЕНД
+   ============================================================ */
 .ag-auth-layout__brand {
   text-align: center;
-  margin-bottom: 32px;
-  animation: agFadeUp 0.6s 0.15s ease both;
+  margin-bottom: 34px;
+  animation: agFadeUp 0.6s 0.18s ease both;
 }
 
 .ag-auth-layout__logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
   background: linear-gradient(135deg, var(--ag-violet), var(--ag-fuchsia));
   color: #fff;
   font-weight: 800;
@@ -159,20 +237,38 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.45);
+  margin: 0 auto 18px;
+  z-index: 0;
   animation: agFloat 5s ease-in-out infinite;
+}
+
+/* Вращающееся свечение за логотипом */
+.ag-auth-layout__logo::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 22px;
+  background: conic-gradient(from 0deg, var(--ag-violet), var(--ag-cyan), var(--ag-fuchsia), var(--ag-violet));
+  z-index: -1;
+  animation: agSpin 5s linear infinite;
+  filter: blur(10px);
+  opacity: 0.85;
+}
+
+@keyframes agSpin {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes agFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-7px); }
 }
 
 .ag-auth-layout__title {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.75));
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 20%, rgba(196, 181, 253, 0.9));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -182,12 +278,15 @@ body {
 .ag-auth-layout__subtitle {
   font-size: 0.84rem;
   color: var(--ag-text-muted);
+  letter-spacing: 0.02em;
 }
 
-/* ===== Форма ===== */
+/* ============================================================
+   ФОРМА
+   ============================================================ */
 .ag-form-wrapper {
   text-align: center;
-  animation: agFadeUp 0.6s 0.25s ease both;
+  animation: agFadeUp 0.6s 0.28s ease both;
 }
 
 .ag-form__title {
@@ -210,6 +309,15 @@ body {
   text-align: left;
 }
 
+/* Каскадное появление полей и кнопки */
+.ag-form > * {
+  animation: agFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ag-form > *:nth-child(1) { animation-delay: 0.34s; }
+.ag-form > *:nth-child(2) { animation-delay: 0.42s; }
+.ag-form > *:nth-child(3) { animation-delay: 0.5s; }
+
 .ag-form__footer {
   margin-top: 22px;
   font-size: 0.84rem;
@@ -219,10 +327,11 @@ body {
     color: var(--ag-cyan);
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
 
     &:hover {
       color: #fff;
+      text-shadow: 0 0 14px rgba(34, 211, 238, 0.6);
       text-decoration: underline;
     }
 
@@ -234,7 +343,9 @@ body {
   }
 }
 
-/* ===== Поля ===== */
+/* ============================================================
+   ПОЛЯ
+   ============================================================ */
 .ag-field {
   display: flex;
   flex-direction: column;
@@ -249,40 +360,44 @@ body {
 
 .ag-field__input {
   width: 100%;
-  padding: 11px 13px;
+  padding: 12px 14px;
   border: 1.5px solid var(--ag-border);
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: 'Inter', sans-serif;
   font-size: 0.88rem;
   color: var(--ag-text);
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, transform 0.25s ease;
 
   &::placeholder { color: var(--ag-text-faint); }
 
   &:hover {
     background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.28);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--ag-border-focus);
+    border-color: rgba(139, 92, 246, 0.9);
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25), 0 0 20px rgba(139, 92, 246, 0.15);
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 0 4px rgba(139, 92, 246, 0.22),
+      0 8px 30px rgba(139, 92, 246, 0.18);
   }
 }
 
 .ag-field__password {
   position: relative;
 
-  .ag-field__input { padding-right: 42px; }
+  .ag-field__input { padding-right: 44px; }
 }
 
 .ag-field__toggle {
   position: absolute;
-  right: 11px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -295,7 +410,7 @@ body {
 
   &:hover {
     color: var(--ag-cyan);
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(-50%) scale(1.15);
   }
 
   &:focus-visible {
@@ -308,20 +423,22 @@ body {
 .ag-field__error {
   font-size: 0.75rem;
   color: var(--ag-error);
-  animation: agShake 0.3s ease;
+  animation: agShake 0.35s ease;
 }
 
 @keyframes agShake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
-/* ===== Кнопки ===== */
+/* ============================================================
+   КНОПКИ
+   ============================================================ */
 .ag-btn {
-  padding: 11px 20px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
@@ -341,57 +458,67 @@ body {
 }
 
 .ag-btn--primary {
-  background: linear-gradient(135deg, var(--ag-violet), var(--ag-indigo));
+  background: linear-gradient(135deg, var(--ag-violet), var(--ag-indigo), var(--ag-cyan));
+  background-size: 220% 220%;
+  animation: agBtnGradient 6s ease infinite;
   color: #fff;
   width: 100%;
-  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.4);
   overflow: hidden;
 
-  /* Блик, пробегающий по кнопке */
+  /* Пробегающий блик */
   &::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -80%;
+    left: -85%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     transform: skewX(-20deg);
-    transition: left 0.5s ease;
+    transition: left 0.55s ease;
   }
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 10px 34px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 14px 40px rgba(99, 102, 241, 0.55);
   }
 
   &:hover:not(:disabled)::after {
-    left: 130%;
+    left: 140%;
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
+    transform: translateY(0) scale(0.98);
   }
+}
+
+@keyframes agBtnGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .ag-btn--outline {
   background: rgba(255, 255, 255, 0.06);
   color: var(--ag-text);
   border: 1.5px solid var(--ag-border);
-  padding: 7px 16px;
+  padding: 8px 16px;
   font-size: 0.82rem;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 
   &:hover:not(:disabled) {
     border-color: var(--ag-violet);
-    background: rgba(139, 92, 246, 0.15);
+    background: rgba(139, 92, 246, 0.16);
     color: #fff;
     transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
   }
 }
 
-/* ===== Loader ===== */
+/* ============================================================
+   LOADER
+   ============================================================ */
 .ag-loader {
   display: flex;
   align-items: center;
@@ -405,26 +532,25 @@ body {
 
 .ag-loader::before {
   content: '';
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 3px solid rgba(255, 255, 255, 0.15);
   border-top-color: var(--ag-violet);
+  border-right-color: var(--ag-cyan);
   animation: agSpin 0.8s linear infinite;
 }
 
-@keyframes agSpin {
-  to { transform: rotate(360deg); }
-}
-
-/* ===== App-дашборд (после входа) ===== */
+/* ============================================================
+   ДАШБОРД (после входа)
+   ============================================================ */
 .ag-app-layout {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 10%, rgba(139, 92, 246, 0.25), transparent 45%),
-    radial-gradient(circle at 85% 90%, rgba(34, 211, 238, 0.2), transparent 45%),
+    radial-gradient(circle at 15% 10%, rgba(139, 92, 246, 0.28), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(34, 211, 238, 0.22), transparent 45%),
     linear-gradient(135deg, #0f1023, #171238);
-  animation: agBgShift 20s ease-in-out infinite;
+  animation: agBgShift 18s ease-in-out infinite;
   background-size: 200% 200%;
 }
 
@@ -434,8 +560,8 @@ body {
   justify-content: space-between;
   padding: 12px 32px;
   background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--ag-border);
   position: sticky;
   top: 0;
@@ -470,7 +596,6 @@ body {
   padding: 40px 24px;
 }
 
-/* ===== Дашборд ===== */
 .ag-dashboard {
   display: flex;
   flex-direction: column;
@@ -479,11 +604,11 @@ body {
 
 .ag-dashboard__card,
 .ag-dashboard__info {
-  background: var(--ag-glass);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
   border: 1px solid var(--ag-border);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
 }
 
 .ag-dashboard__card {
@@ -494,19 +619,32 @@ body {
 }
 
 .ag-dashboard__avatar {
-  width: 68px;
-  height: 68px;
+  position: relative;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--ag-violet), var(--ag-fuchsia));
   color: #fff;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.45);
+  margin: 0 auto 18px;
+  z-index: 0;
   animation: agFloat 5s ease-in-out infinite;
+}
+
+.ag-dashboard__avatar::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--ag-violet), var(--ag-cyan), var(--ag-fuchsia), var(--ag-violet));
+  z-index: -1;
+  animation: agSpin 6s linear infinite;
+  filter: blur(12px);
+  opacity: 0.8;
 }
 
 .ag-dashboard__title {
@@ -562,11 +700,12 @@ body {
     border: 1px solid rgba(139, 92, 246, 0.3);
     color: #c4b5fd;
     font-weight: 500;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
       transform: translateY(-2px);
       background: rgba(139, 92, 246, 0.28);
+      box-shadow: 0 6px 18px rgba(139, 92, 246, 0.25);
     }
   }
 }
@@ -574,7 +713,7 @@ body {
 @keyframes agFadeUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
@@ -582,7 +721,28 @@ body {
   }
 }
 
-/* ===== Доступность: отключить анимации, если просит система ===== */
+/* ============================================================
+   TOAST (уведомления) — тёмное стекло
+   ============================================================ */
+.Toastify__toast {
+  background: rgba(20, 22, 48, 0.85) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.86rem !important;
+}
+
+.Toastify__progress-bar {
+  background: linear-gradient(90deg, var(--ag-violet), var(--ag-cyan)) !important;
+}
+
+/* ============================================================
+   ДОСТУПНОСТЬ
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -593,9 +753,11 @@ body {
   }
 }
 
-/* ===== Responsive ===== */
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 768px) {
-  .ag-auth-layout__card { padding: 30px 26px; }
+  .ag-auth-layout__card { padding: 32px 26px; }
   .ag-nav { padding: 10px 16px; }
   .ag-nav__email { display: none; }
   .ag-dashboard__card { padding: 28px 20px; }
@@ -603,9 +765,9 @@ body {
 
 @media (max-width: 480px) {
   .ag-auth-layout { padding: 16px; }
-  .ag-auth-layout__card { padding: 26px 20px; border-radius: 16px; }
-  .ag-auth-layout__title { font-size: 1.3rem; }
+  .ag-auth-layout__card { padding: 28px 20px; border-radius: 18px; }
+  .ag-auth-layout__title { font-size: 1.35rem; }
   .ag-form__title { font-size: 1.05rem; }
-  .ag-field__input { font-size: 0.85rem; padding: 10px 11px; }
+  .ag-field__input { font-size: 0.85rem; padding: 11px 12px; }
   .ag-app-layout__main { padding: 24px 16px; }
 }
