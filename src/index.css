@@ -140,7 +140,7 @@ body {
 }
 
 /* ============================================================
-   КАРТОЧКА — стекло + градиентная рамка + прожектор
+   КАРТОЧКА — стекло
    ============================================================ */
 .ag-auth-layout__card {
   position: relative;
@@ -162,47 +162,6 @@ body {
 
 .ag-auth-layout__card:hover {
   transform: translateY(-2px);
-}
-
-/* Градиентная рамка */
-.ag-auth-layout__card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 92, 246, 0.32),
-    rgba(34, 211, 238, 0.18) 40%,
-    rgba(217, 70, 239, 0.26) 80%,
-    rgba(139, 92, 246, 0.32)
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Прожектор, следующий за курсором */
-.ag-card-spotlight {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  background: radial-gradient(
-    circle 420px at var(--mx, 50%) var(--my, 50%),
-    rgba(139, 92, 246, 0.13),
-    rgba(34, 211, 238, 0.05) 40%,
-    transparent 68%
-  );
-  pointer-events: none;
-}
-
-.ag-auth-layout__card:hover .ag-card-spotlight {
-  opacity: 1;
 }
 
 @keyframes agCardIn {
@@ -242,23 +201,62 @@ body {
   animation: agFloat 5s ease-in-out infinite;
 }
 
-/* Вращающееся свечение за логотипом — мягкое, пастельное */
+/* Жидкокристаллическое свечение за логотипом —
+   переливается, как масляная плёнка на воде */
 .ag-auth-layout__logo::before {
   content: '';
   position: absolute;
-  inset: -5px;
-  border-radius: 22px;
+  inset: -6px;
+  border-radius: 24px;
   background: conic-gradient(
     from 0deg,
-    rgba(167, 139, 250, 0.9),
-    rgba(103, 232, 249, 0.65),
-    rgba(240, 171, 252, 0.8),
-    rgba(167, 139, 250, 0.9)
+    rgba(139, 92, 246, 0.55),
+    rgba(34, 211, 238, 0.4),
+    rgba(244, 114, 182, 0.5),
+    rgba(167, 139, 250, 0.55)
   );
   z-index: -1;
-  animation: agSpin 5s linear infinite;
-  filter: blur(14px);
-  opacity: 0.45;
+  animation: agLiquid 9s linear infinite;
+  filter: blur(16px);
+  opacity: 0.55;
+}
+
+/* Глянцевый блик на самой плашке — как стекло */
+.ag-auth-layout__logo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 44%,
+    rgba(255, 255, 255, 0.08) 52%,
+    transparent 68%
+  );
+  background-size: 260% 260%;
+  animation: agSheen 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes agLiquid {
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: blur(16px) hue-rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.12);
+    filter: blur(20px) hue-rotate(45deg);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    filter: blur(16px) hue-rotate(0deg);
+  }
+}
+
+@keyframes agSheen {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -60% 0; }
 }
 
 @keyframes agSpin {
@@ -644,19 +642,37 @@ body {
 .ag-dashboard__avatar::before {
   content: '';
   position: absolute;
-  inset: -5px;
+  inset: -6px;
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    rgba(167, 139, 250, 0.9),
-    rgba(103, 232, 249, 0.65),
-    rgba(240, 171, 252, 0.8),
-    rgba(167, 139, 250, 0.9)
+    rgba(139, 92, 246, 0.55),
+    rgba(34, 211, 238, 0.4),
+    rgba(244, 114, 182, 0.5),
+    rgba(167, 139, 250, 0.55)
   );
   z-index: -1;
-  animation: agSpin 6s linear infinite;
+  animation: agLiquid 9s linear infinite;
   filter: blur(16px);
-  opacity: 0.5;
+  opacity: 0.55;
+}
+
+/* Глянцевый блик на аватарке */
+.ag-dashboard__avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 44%,
+    rgba(255, 255, 255, 0.07) 52%,
+    transparent 68%
+  );
+  background-size: 260% 260%;
+  animation: agSheen 5.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .ag-dashboard__title {
